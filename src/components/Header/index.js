@@ -1,23 +1,38 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+
+import arrowLeftIcon from 'Assets/left-chevron.svg';
+import menuIcon from 'Assets/hamburger.svg';
 import styles from './styles.module.css';
-import arrowLeftIcon from '../../images/baseline-chevron_left-24px.svg';
-import menuIcon from '../../images/baseline-menu-24px.svg';
 
-const Header = ({ title }) => (
-  <header className={styles.header}>
-    <div className={styles.backBtn}><img src={arrowLeftIcon} alt="뒤로 가기" /></div>
-    <div className={styles.title}>{title}</div>
-    <div className="menu"><img src={menuIcon} alt="메뉴" /></div>
-  </header>
-);
+const Header = ({ title = '', hideBackBtn = false, history }) => {
+    if (hideBackBtn) {
+        return (
+            <header className={styles.header}>
+                <img src={menuIcon} alt="메뉴" />
+                <div>{title}</div>
+                <div
+                    style={{
+                        visibility: 'hidden',
+                        width: 24,
+                        height: 24,
+                    }}
+                />
+            </header>
+        );
+    }
 
-Header.propTypes = {
-  title: PropTypes.string,
+    return (
+        <header className={styles.header}>
+            <img
+                src={arrowLeftIcon}
+                alt="뒤로 가기"
+                onClick={() => history.goBack()}
+            />
+            <div>{title}</div>
+            <img src={menuIcon} alt="메뉴" />
+        </header>
+    );
 };
 
-Header.defaultProps = {
-  title: 'Menu',
-};
-
-export default Header;
+export default withRouter(Header);

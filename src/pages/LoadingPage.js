@@ -1,29 +1,28 @@
 import React from 'react';
-import Loading from 'components/Loading';
-import { withRouter } from 'react-router-dom';
-// const LoadingPage = () => <Loading />;
+import queryString from 'query-string';
 
-class LoadingPage extends React.Component {
-    handleClick = (e) => {
-        /*
-        라우트로 설정한 컴포넌트는, history, location, match 3가지의 props 를 전달받게 됩니다:
-        이중에서 history 이 객체의 push, replace 를 통해 다른 경로로 이동하거나 앞 뒤 페이지로 전환 할 수 있습니다.
-        이 Loading 페이지에서는 Router를 통해서 로딩페이지가 '/basic' 페이지로 이동하는 링크를 만들기 위해서 .push를 사용합니다.
-        */
-        const { history } = this.props;
-        history.push('/basic');
-    }
+import LoadingContainer from '../containers/LoadingContainer';
 
-    render() {
-        const { handleClick } = this;
-        return (<Loading handleClick={handleClick} />);
-    }
-}
+const LoadingPage = ({ location: { search }, history }) => {
+    const { shopId, seatId } = queryString.parse(search);
+    return (
+        <LoadingContainer
+            shopId={shopId}
+            seatId={seatId}
+            onLoadFinished={() => history.push('/basic')}
+        />
+    );
+};
 
-// ?? Loading page에서만 withRouter를 사용해서 export한 이유가 있나요?
 /*
-https://velopert.com/3417
-https://reacttraining.com/react-router/web/api/withRouter
+Q:
+    withRouter를 Page에도 쓸 필요가 있는가?
+
+A:
+    <Route exact path="/" component={LoadingPage} /> 와 같이
+    Route의 component로 전달되는 컴포넌트에는 React-router가 제공하는
+    props가 기본적으로 전달되므로, withRouter HoC를 쓸 필요가 없습니다.
+
 */
 
-export default withRouter(LoadingPage);
+export default LoadingPage;

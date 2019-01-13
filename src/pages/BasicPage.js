@@ -1,18 +1,25 @@
 import React from 'react';
+import { showFooter } from 'modules/Cart';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
-import StoreProfile from '../components/StoreProfile';
 import MenuContainer from '../containers/menu/MenuContainer';
-import Footer from '../components/Footer';
+import FooterContainer from '../containers/FooterContainer';
 
-import Image from '../Assets/logostory.jpg';
-
-const BasicPage = () => (
+const BasicPage = ({ history, showFooter }) => (
     <div>
-        <Header />
-        <StoreProfile Image={Image} Table="TABLE 17" Title="The Burgur Co" />
-        <MenuContainer />
-        <Footer />
+        <Header title="Menu" hideBackBtn />
+        <MenuContainer showFooter={showFooter} />
+        {showFooter ? (
+            <FooterContainer
+                text="VIEW MY CART"
+                onClick={() => history.push('/cart')}
+            />
+        ) : null}
     </div>
 );
 
-export default BasicPage;
+const mapStateToProps = state => ({
+    showFooter: showFooter(state),
+});
+
+export default connect(mapStateToProps)(BasicPage);
